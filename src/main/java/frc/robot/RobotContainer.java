@@ -77,9 +77,8 @@ public class RobotContainer {
                 () -> m_robotDrive.setX(),
                 m_robotDrive));
         Trigger BACK_drive = m_driverController.back();
-        BACK_drive.onTrue(new RunCommand(
-                () -> m_robotDrive.zeroHeading(),
-                m_robotDrive));
+        BACK_drive.whileTrue(new RunCommand(
+                () -> m_robotDrive.zeroHeading()));
 
     }
 
