@@ -19,9 +19,9 @@ public class cmdDriveStraight extends CommandBase {
     private Pose2d startingPose2d_meters = null;
 
 
-    public cmdDriveStraight(double targetDistance, double speed_X, double heading) {
+    public cmdDriveStraight(double targetDistance_inches, double speed_X, double heading) {
 
-        targetPosition = targetDistance;
+        targetPosition = targetDistance_inches;
         power_X = speed_X;
         power_Y = 0.0;
         targetHeading = heading;
@@ -30,9 +30,9 @@ public class cmdDriveStraight extends CommandBase {
         // addRequirements(m_subsystem);
     }
 
-    public cmdDriveStraight(double targetDistance, double speed_X, double speed_Y, double heading) {
+    public cmdDriveStraight(double targetDistance_inches, double speed_X, double speed_Y, double heading) {
 
-        targetPosition = targetDistance;
+        targetPosition = targetDistance_inches;
         power_X = speed_X;
         power_Y = speed_Y;
         targetHeading = heading;

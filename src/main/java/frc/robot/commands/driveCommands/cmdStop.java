@@ -9,7 +9,7 @@ public class cmdStop extends CommandBase {
     private boolean bDone = false;
 
     public cmdStop() {
-
+        bDone = false;
     }
 
     // Called when the command is initially scheduled.
