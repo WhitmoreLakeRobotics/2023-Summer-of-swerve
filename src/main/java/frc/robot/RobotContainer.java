@@ -13,11 +13,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.autons.testAuton;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -36,8 +39,9 @@ import java.util.List;
  */
 public class RobotContainer {
     // The robot's subsystems
-    private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+    public final DriveSubsystem m_robotDrive = new DriveSubsystem();
     private static RobotContainer m_robotContainer = new RobotContainer();
+    SendableChooser<Command> m_Chooser = new SendableChooser<>();
     // The driver's controller
     CommandXboxController m_driverController = new CommandXboxController(0);
 
@@ -49,6 +53,7 @@ public class RobotContainer {
 
         configureButtonBindings();
 
+        m_Chooser.setDefaultOption("Test Auton 1", new testAuton());
         // Configure default commands
         m_robotDrive.setDefaultCommand(
                 // The left stick controls translation of the robot.
@@ -88,6 +93,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
+                return m_Chooser.getSelected();        
+        /* 
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
                 AutoConstants.kMaxSpeedMetersPerSecond,
@@ -126,7 +133,7 @@ public class RobotContainer {
 
         // Run path following command, then stop at the end.
         return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
-    }
+    */ }
 
     public void updateSmartDashboard() {
         SmartDashboard.putNumber("heading", m_robotDrive.getHeading());

@@ -15,12 +15,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
-import edu.wpi.first.wpilibj.SerialPort;
+import frc.robot.RobotMath;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
+  
+  public final double kp_driveStraightGyro = 0.025;
+
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -42,7 +45,9 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
-  public final AHRS m_gyro = new AHRS(SerialPort.Port.kMXP);
+  // moved to a subsystem with all of the WLRobotics functions  
+  public final SubGyro m_gyro = new SubGyro();
+
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -65,6 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    
   }
 
   @Override
@@ -238,5 +244,17 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  // This should stop the motors.   
+  public void stopDrive(){
+    // Stop the motors and the turning NOW.
+    drive(0,0,0,true,true);
+  }
+
+  // Get the distance traveled from a start pose2d
+  public double getDistanceTraveledInches(Pose2d startPose2d) {
+    Pose2d curPose_Meters = m_odometry.getPoseMeters();
+    return (RobotMath.metersToInches(curPose_Meters.getTranslation().getDistance(startPose2d.getTranslation())));
   }
 }
