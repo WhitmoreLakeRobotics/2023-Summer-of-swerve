@@ -5,13 +5,26 @@ import frc.robot.commands.driveCommands.cmdDriveStraight;
 import frc.robot.commands.driveCommands.cmdStop;
 import frc.robot.commands.util.cmdDelay;
 
+
+// TODO 
+// refactor joystick to be seperate from auton
+// add a cmdTurn
+// Tuning
+
+
 public class testAuton extends SequentialCommandGroup {
     
     public testAuton() {
         addCommands(new cmdDriveStraight(12, 0.15, 0));
         addCommands(new cmdStop());
+        addCommands(new cmdDelay(1.0)); 
+        addCommands(new cmdDriveStraight(12, 0, 0.15, 0));
+        addCommands(new cmdStop());
         addCommands(new cmdDelay(1.0));
         addCommands(new cmdDriveStraight(12, -0.15, 0));
+        addCommands(new cmdStop());
+        addCommands(new cmdDelay(1.0)); 
+        addCommands(new cmdDriveStraight(12, 0, -0.15, 0));
         addCommands(new cmdStop());
         addCommands(new cmdDelay(1.0));
         // once the command can drive forward 24 inches then return 
