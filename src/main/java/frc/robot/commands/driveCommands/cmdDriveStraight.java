@@ -60,9 +60,9 @@ public class cmdDriveStraight extends CommandBase {
         double headingDelta = RobotMath.calcTurnRate(RobotContainer.getInstance().m_robotDrive.m_gyro.getAngle(),
                 targetHeading, RobotContainer.getInstance().m_robotDrive.kp_driveStraightGyro);
 
-        // double headingDelta = 0;
+         // headingDelta = -0;
 
-        RobotContainer.getInstance().m_robotDrive.drive(power_X,power_Y, headingDelta, false, true);
+        RobotContainer.getInstance().m_robotDrive.drive(power_X,power_Y, -headingDelta, false, true);
         if (Math.abs(RobotContainer.getInstance().m_robotDrive.getDistanceTraveledInches(startingPose2d_meters)) >= Math
                 .abs(targetPosition)) {
             bDone = true;
