@@ -47,6 +47,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    RobotContainer.getInstance().updateSmartDashboard();
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled
     // commands, running already-scheduled commands, removing finished or
@@ -64,7 +65,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    RobotContainer.getInstance().updateSmartDashboard();
   }
 
   /**
@@ -107,7 +107,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    RobotContainer.getInstance().updateSmartDashboard();
   }
 
   @Override
