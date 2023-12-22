@@ -1,5 +1,6 @@
 package frc.robot.commands.driveCommands;
 
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -9,43 +10,54 @@ import frc.robot.RobotMath;
  *
  */
 public class cmdDriveStraight extends CommandBase {
-    private double targetPosition = 0; // inches
-    private double power_X = 0.0;
-    private double power_Y = 0.0;
+    private double dTargetPosition = 0; // inches
+    private double dPower_X = 0.0;
+    private double dPower_Y = 0.0;
     private double targetHeading = 0;
     private boolean bDone = false;
     // private double overshootValue = 0;
     // private WL_Spark.IdleMode idleMode = WL_Spark.IdleMode.kBrake;
     private Pose2d startingPose2d_meters = null;
+    boolean bFieldRelative = false;
+    boolean bRateLimit = false;
 
 
     public cmdDriveStraight(double targetDistance_inches, double speed_X, double heading) {
 
-        targetPosition = targetDistance_inches;
-        power_X = speed_X;
-        power_Y = 0.0;
+        dTargetPosition = targetDistance_inches;
+        dPower_X = speed_X;
+        dPower_Y = 0.0;
         targetHeading = heading;
 
         // m_subsystem = subsystem;
         // addRequirements(m_subsystem);
     }
 
-    public cmdDriveStraight(double targetDistance_inches, double speed_X, double speed_Y, double heading) {
+    public cmdDriveStraight(double targetDistance_inches, double speed_X, double speed_Y, double heading_deg) {
 
-        targetPosition = targetDistance_inches;
-        power_X = speed_X;
-        power_Y = speed_Y;
-        targetHeading = heading;
+        dTargetPosition = targetDistance_inches;
+        dPower_X = speed_X;
+        dPower_Y = speed_Y;
+        targetHeading = heading_deg;
 
         // m_subsystem = subsystem;
         // addRequirements(m_subsystem);
+    }
+    public cmdDriveStraight(double targetDistance_inches, double speed_X, double speed_Y, double heading_deg, boolean fieldRelative, boolean rateLimit){
+        dTargetPosition = targetDistance_inches;
+        dPower_X = speed_X;
+        dPower_Y = speed_Y;
+        targetHeading = heading_deg;
+        bFieldRelative = fieldRelative;
+        bRateLimit = rateLimit;
+
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         bDone = false;
-        // since we are doing a delta pose to tell if we are done there should be no need to 
+        // since we are doing a delta pose to tell if we are done there should be no need to
         // reset encoders.
         // RobotContainer.getInstance().m_robotDrive.resetEncoders();
 
@@ -62,9 +74,9 @@ public class cmdDriveStraight extends CommandBase {
 
          // headingDelta = -0;
 
-        RobotContainer.getInstance().m_robotDrive.drive(power_X,power_Y, -headingDelta, false, true);
+        RobotContainer.getInstance().m_robotDrive.drive(dPower_X, dPower_Y, -headingDelta, bFieldRelative, bRateLimit);
         if (Math.abs(RobotContainer.getInstance().m_robotDrive.getDistanceTraveledInches(startingPose2d_meters)) >= Math
-                .abs(targetPosition)) {
+                .abs(dTargetPosition)) {
             bDone = true;
             RobotContainer.getInstance().m_robotDrive.stopDrive();
         }

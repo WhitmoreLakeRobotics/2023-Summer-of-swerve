@@ -43,7 +43,7 @@ public class RobotContainer {
     private static RobotContainer m_robotContainer = new RobotContainer();
     SendableChooser<Command> m_Chooser = new SendableChooser<>();
     // The driver's controller
-    CommandXboxController m_driverController = new CommandXboxController(0);
+    public final CommandXboxController m_driverController = new CommandXboxController(0);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -55,7 +55,7 @@ public class RobotContainer {
 
         m_Chooser.setDefaultOption("Test Auton 1", new testAuton());
         // Configure default commands
-        m_robotDrive.setDefaultCommand(
+        /*m_robotDrive.setDefaultCommand(
                 // The left stick controls translation of the robot.
                 // Turning is controlled by the X axis of the right stick.
                 new RunCommand(
@@ -65,6 +65,7 @@ public class RobotContainer {
                                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                                 true, true),
                         m_robotDrive));
+                        */
     }
 
     /**
@@ -93,8 +94,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-                return m_Chooser.getSelected();        
-        /* 
+                return m_Chooser.getSelected();
+        /*
         // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
                 AutoConstants.kMaxSpeedMetersPerSecond,

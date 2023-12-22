@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    RobotContainer.getInstance().m_robotDrive.stopDrive();
   }
 
   @Override
@@ -73,6 +74,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    RobotContainer.getInstance().m_robotDrive.stopDrive();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     /*
@@ -107,6 +109,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    RobotContainer.getInstance().m_robotDrive.cmdTeleOp(RobotContainer.getInstance().m_driverController);
   }
 
   @Override

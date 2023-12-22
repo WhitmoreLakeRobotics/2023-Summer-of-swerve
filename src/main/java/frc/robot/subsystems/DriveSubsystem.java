@@ -16,12 +16,16 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import frc.robot.RobotMath;
-import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.*;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.math.MathUtil;
+import frc.robot.RobotContainer;
+
 
 public class DriveSubsystem extends SubsystemBase {
-  
+
   public final double kp_driveStraightGyro = 0.0125;
 
   // Create MAXSwerveModules
@@ -45,7 +49,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
-  // moved to a subsystem with all of the WLRobotics functions  
+  // moved to a subsystem with all of the WLRobotics functions
   public final SubGyro m_gyro = new SubGyro();
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -70,7 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    
+
   }
 
   @Override
@@ -247,7 +251,7 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  // This should stop the motors.   
+  // This should stop the motors.
   public void stopDrive(){
     // Stop the motors and the turning NOW.
     drive(0,0,0,true,true);
@@ -258,4 +262,20 @@ public class DriveSubsystem extends SubsystemBase {
     Pose2d curPose_Meters = m_odometry.getPoseMeters();
     return (RobotMath.metersToInches(curPose_Meters.getTranslation().getDistance(startPose2d.getTranslation())));
   }
+
+  public void cmdTeleOp(CommandXboxController driveController) {
+    // Apply Deadband
+    double leftY =   MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftY(), OIConstants.kDriveDeadband);
+    double leftX = MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftX(), OIConstants.kDriveDeadband);
+    double rightX = MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getRightX(), OIConstants.kDriveDeadband);
+
+    // square them to make them usefully curved
+    leftY = Math.signum(leftY) * leftY * leftY;
+    leftX = Math.signum(leftX) * leftX * leftX;
+    rightX = Math.signum(rightX) * rightX * rightX;
+
+    // Drive the bot
+    RobotContainer.getInstance().m_robotDrive.drive(leftY, leftX, rightX, true, true);
+  }
+
 }
