@@ -265,9 +265,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void cmdTeleOp(CommandXboxController driveController) {
     // Apply Deadband
-    double leftY =   MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftY(), OIConstants.kDriveDeadband);
-    double leftX = MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftX(), OIConstants.kDriveDeadband);
-    double rightX = MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getRightX(), OIConstants.kDriveDeadband);
+    double leftY =   -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftY(), OIConstants.kDriveDeadband);
+    double leftX = -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftX(), OIConstants.kDriveDeadband);
+    double rightX = -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getRightX(), OIConstants.kDriveDeadband);
 
     // square them to make them usefully curved
     leftY = Math.signum(leftY) * leftY * leftY;
