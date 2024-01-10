@@ -2,14 +2,14 @@ package frc.robot.commands.driveCommands;
 
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMath;
 
 /**
  *
  */
-public class cmdDriveStraight extends CommandBase {
+public class cmdDriveStraight extends Command {
     private double dTargetPosition = 0; // inches
     private double dPower_X = 0.0;
     private double dPower_Y = 0.0;

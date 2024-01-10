@@ -1,12 +1,12 @@
 package frc.robot.commands.util;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.RobotMath;
 
 /**
  *
  */
-public class cmdDelay extends CommandBase {
+public class cmdDelay extends Command {
     private boolean bDone = false;
     private double seconds2Delay = 0 ;
     private double endTime = 0;

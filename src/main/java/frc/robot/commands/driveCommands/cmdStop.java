@@ -1,11 +1,11 @@
 package frc.robot.commands.driveCommands;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 
 /**
  *
  */
-public class cmdStop extends CommandBase {
+public class cmdStop extends Command {
     private boolean bDone = false;
 
     public cmdStop() {
