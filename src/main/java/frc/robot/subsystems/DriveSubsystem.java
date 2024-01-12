@@ -26,6 +26,7 @@ import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.MathUtil;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import edu.wpi.first.math.kinematics.*;
 
@@ -81,18 +82,17 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem() {
         // All other subsystem initialization
         // ...
-
         // Configure AutoBuilder last
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
-                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new PIDConstants(Constants.ModuleConstants.kDrivingP, Constants.ModuleConstants.kDrivingI, Constants.ModuleConstants.kDrivingD), // Translation PID constants
+                        new PIDConstants(Constants.ModuleConstants.kTurningP, Constants.ModuleConstants.kTurningI, Constants.ModuleConstants.kTurningD), // Rotation PID constants
+                        Constants.DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
+                        Constants.DriveConstants.kRadius_meters, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),
                 () -> {
@@ -148,6 +148,8 @@ public class DriveSubsystem extends SubsystemBase {
         },
         pose);
   }
+
+
 
   /**
    * Method to drive the robot using joystick info.
@@ -310,7 +312,7 @@ public class DriveSubsystem extends SubsystemBase {
     // Drive the bot
     RobotContainer.getInstance().m_robotDrive.drive(leftY, leftX, rightX, true, true);
   }
-  public ChassisSpeeds getSpeeds() {
+  /*public ChassisSpeeds getSpeeds() {
     
     double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
@@ -318,7 +320,19 @@ public class DriveSubsystem extends SubsystemBase {
 
     return kinematics.toChassisSpeeds(DriveConstants.kDriveKinematics.toSwerveModuleStates());
 
+  }*/
+  // Return a Chassis Speed that is based on the WPI drive Kinimatics
+  public ChassisSpeeds  getChassisSpeeds (){
+
+    // https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html
+    return  DriveConstants.kDriveKinematics.toChassisSpeeds();
+
   }
 
+// wrap the drive command with a function that accepts a ChassisSpeed Object
+public void driveRobotRelative (ChassisSpeeds cs) {
+
+  this.drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond,false,true);
+}
   
 }
