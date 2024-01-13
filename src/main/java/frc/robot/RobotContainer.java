@@ -69,6 +69,8 @@ public class RobotContainer {
                                 true, true),
                         m_robotDrive));
                         */
+                        SmartDashboard.putData("Auto Mode", m_Chooser);
+                      
     }
 
     /**
@@ -142,6 +144,7 @@ public class RobotContainer {
     public void updateSmartDashboard() {
         SmartDashboard.putNumber("heading", m_robotDrive.getHeading());
         SmartDashboard.putData("Auto Mode",m_Chooser);
+        
     }
 
     public static RobotContainer getInstance() {

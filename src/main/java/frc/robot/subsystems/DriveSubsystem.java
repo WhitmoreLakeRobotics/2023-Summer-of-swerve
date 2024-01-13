@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -29,6 +31,7 @@ import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import edu.wpi.first.math.kinematics.*;
+import frc.robot.subsystems.MAXSwerveModule;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -55,6 +58,12 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
+      
+      private List<MAXSwerveModule> m_swerveModules;
+      
+
+      
+
   // moved to a subsystem with all of the WLRobotics functions
   public final SubGyro m_gyro = new SubGyro();
 
@@ -80,9 +89,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   
     public DriveSubsystem() {
-        // All other subsystem initialization
+        
+       
+      // All other subsystem initialization
         // ...
         // Configure AutoBuilder last
+      
         AutoBuilder.configureHolonomic(
                 this::getPose, // Robot pose supplier
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -324,8 +336,13 @@ public class DriveSubsystem extends SubsystemBase {
   // Return a Chassis Speed that is based on the WPI drive Kinimatics
   public ChassisSpeeds  getChassisSpeeds (){
 
+  //SwerveModuleState [] SMS = {m_frontLeft.getState(),m_frontRight.getState(),m_rearLeft.getState(),m_rearRight.getState()};
+
+      
     // https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html
-    return  DriveConstants.kDriveKinematics.toChassisSpeeds();
+    //return  DriveConstants.kDriveKinematics.toChassisSpeeds(SMS);
+    return  DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(),m_frontRight.getState(),m_rearLeft.getState(),m_rearRight.getState());
+
 
   }
 
