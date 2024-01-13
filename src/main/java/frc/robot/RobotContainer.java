@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -54,6 +56,7 @@ public class RobotContainer {
         configureButtonBindings();
 
         m_Chooser.setDefaultOption("Test Auton 1", new testAuton());
+        m_Chooser.addOption("Test Path Planner Auto", new PathPlannerAuto("test_auto"));
         // Configure default commands
         /*m_robotDrive.setDefaultCommand(
                 // The left stick controls translation of the robot.
