@@ -147,8 +147,11 @@ public class RobotContainer {
         SmartDashboard.putNumber("heading", m_robotDrive.getHeading());
         SmartDashboard.putData("Auto Mode",m_Chooser);
         SmartDashboard.putNumber("Distance Traveled", m_robotDrive.getDistanceTraveledInches(new Pose2d(2.0, 7.0, new Rotation2d())));
-        
-    }
+        SmartDashboard.putNumber("X pos", m_robotDrive.m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Y pos", m_robotDrive.m_odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("Rotation", m_robotDrive.m_odometry.getPoseMeters().getRotation().getDegrees());
+    }   
+
 
     public static RobotContainer getInstance() {
         return m_robotContainer;
