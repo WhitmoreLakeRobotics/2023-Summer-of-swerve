@@ -349,7 +349,7 @@ public class DriveSubsystem extends SubsystemBase {
 // wrap the drive command with a function that accepts a ChassisSpeed Object
 public void driveRobotRelative (ChassisSpeeds cs) {
 
-  this.drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond,false,true);
+  this.drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond,false,false);
 }
   
 }

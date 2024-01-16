@@ -57,6 +57,8 @@ public class RobotContainer {
 
         m_Chooser.setDefaultOption("Test Auton 1", new testAuton());
         m_Chooser.addOption("Test Path Planner Auto", new PathPlannerAuto("test_auto"));
+        m_Chooser.addOption("Test Path Straight", new PathPlannerAuto("test_auto2"));
+
         // Configure default commands
         /*m_robotDrive.setDefaultCommand(
                 // The left stick controls translation of the robot.
@@ -144,6 +146,7 @@ public class RobotContainer {
     public void updateSmartDashboard() {
         SmartDashboard.putNumber("heading", m_robotDrive.getHeading());
         SmartDashboard.putData("Auto Mode",m_Chooser);
+        SmartDashboard.putNumber("Distance Traveled", m_robotDrive.getDistanceTraveledInches(new Pose2d(2.0, 7.0, new Rotation2d())));
         
     }
 
