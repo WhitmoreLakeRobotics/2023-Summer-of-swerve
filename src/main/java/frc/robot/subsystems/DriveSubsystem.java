@@ -101,8 +101,8 @@ public class DriveSubsystem extends SubsystemBase {
                 this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(Constants.ModuleConstants.kDrivingP, Constants.ModuleConstants.kDrivingI, Constants.ModuleConstants.kDrivingD), // Translation PID constants
-                        new PIDConstants(Constants.ModuleConstants.kTurningP, Constants.ModuleConstants.kTurningI, Constants.ModuleConstants.kTurningD), // Rotation PID constants
+                        new PIDConstants(Constants.AutoConstants.kDrivingP, Constants.AutoConstants.kDrivingI, Constants.AutoConstants.kDrivingD), // Translation PID constants
+                        new PIDConstants(Constants.AutoConstants.kTurningP, Constants.AutoConstants.kTurningI, Constants.AutoConstants.kTurningD), // Rotation PID constants
                         Constants.DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
                         Constants.DriveConstants.kRadius_meters, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -322,7 +322,7 @@ public class DriveSubsystem extends SubsystemBase {
     rightX = Math.signum(rightX) * rightX * rightX;
 
     // Drive the bot
-    RobotContainer.getInstance().m_robotDrive.drive(leftY, leftX, rightX, true, true);
+    RobotContainer.getInstance().m_robotDrive.drive(leftY, leftX, rightX, true, false);
   }
   /*public ChassisSpeeds getSpeeds() {
     
@@ -349,7 +349,7 @@ public class DriveSubsystem extends SubsystemBase {
 // wrap the drive command with a function that accepts a ChassisSpeed Object
 public void driveRobotRelative (ChassisSpeeds cs) {
 
-  this.drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond,false,false);
+  this.drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond,false, true);
 }
   
 }
