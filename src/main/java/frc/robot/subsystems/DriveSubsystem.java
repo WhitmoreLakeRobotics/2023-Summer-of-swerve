@@ -58,11 +58,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
-      
-      private List<MAXSwerveModule> m_swerveModules;
-      
-
-      
+  private List<MAXSwerveModule> m_swerveModules;
 
   // moved to a subsystem with all of the WLRobotics functions
   public final SubGyro m_gyro = new SubGyro();
@@ -87,40 +83,42 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
-  
-    public DriveSubsystem() {
-        
-       
-      // All other subsystem initialization
-        // ...
-        // Configure AutoBuilder last
-      
-        AutoBuilder.configureHolonomic(
-                this::getPose, // Robot pose supplier
-                this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
-                this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(Constants.AutoConstants.kDrivingP, Constants.AutoConstants.kDrivingI, Constants.AutoConstants.kDrivingD), // Translation PID constants
-                        new PIDConstants(Constants.AutoConstants.kTurningP, Constants.AutoConstants.kTurningI, Constants.AutoConstants.kTurningD), // Rotation PID constants
-                        Constants.DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
-                        Constants.DriveConstants.kRadius_meters, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+  public DriveSubsystem() {
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                this // Reference to this subsystem to set requirements
-        );
-    }
+    // All other subsystem initialization
+    // ...
+    // Configure AutoBuilder last
+
+    AutoBuilder.configureHolonomic(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(Constants.AutoConstants.kDrivingP, Constants.AutoConstants.kDrivingI,
+                Constants.AutoConstants.kDrivingD), // Translation PID constants
+            new PIDConstants(Constants.AutoConstants.kTurningP, Constants.AutoConstants.kTurningI,
+                Constants.AutoConstants.kTurningD), // Rotation PID constants
+            Constants.DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
+            Constants.DriveConstants.kRadius_meters, // Drive base radius in meters. Distance from robot center to
+                                                     // furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+  }
 
   @Override
   public void periodic() {
@@ -160,8 +158,6 @@ public class DriveSubsystem extends SubsystemBase {
         },
         pose);
   }
-
-
 
   /**
    * Method to drive the robot using joystick info.
@@ -252,7 +248,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
-
   /**
    * Sets the swerve ModuleStates.
    *
@@ -299,9 +294,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   // This should stop the motors.
-  public void stopDrive(){
+  public void stopDrive() {
     // Stop the motors and the turning NOW.
-    drive(0,0,0,true,true);
+    drive(0, 0, 0, true, true);
   }
 
   // Get the distance traveled from a start pose2d
@@ -312,9 +307,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void cmdTeleOp(CommandXboxController driveController) {
     // Apply Deadband
-    double leftY =   -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftY(), OIConstants.kDriveDeadband);
-    double leftX = -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftX(), OIConstants.kDriveDeadband);
-    double rightX = -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getRightX(), OIConstants.kDriveDeadband);
+    double leftY = -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftY(),
+        OIConstants.kDriveDeadband);
+    double leftX = -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getLeftX(),
+        OIConstants.kDriveDeadband);
+    double rightX = -MathUtil.applyDeadband(RobotContainer.getInstance().m_driverController.getRightX(),
+        OIConstants.kDriveDeadband);
 
     // square them to make them usefully curved
     leftY = Math.signum(leftY) * leftY * leftY;
@@ -324,32 +322,44 @@ public class DriveSubsystem extends SubsystemBase {
     // Drive the bot
     RobotContainer.getInstance().m_robotDrive.drive(leftY, leftX, rightX, true, false);
   }
-  /*public ChassisSpeeds getSpeeds() {
-    
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
-    return kinematics.toChassisSpeeds(DriveConstants.kDriveKinematics.toSwerveModuleStates());
-
-  }*/
+  /*
+   * public ChassisSpeeds getSpeeds() {
+   * 
+   * double xSpeedDelivered = xSpeedCommanded *
+   * DriveConstants.kMaxSpeedMetersPerSecond;
+   * double ySpeedDelivered = ySpeedCommanded *
+   * DriveConstants.kMaxSpeedMetersPerSecond;
+   * double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
+   * 
+   * return kinematics.toChassisSpeeds(DriveConstants.kDriveKinematics.
+   * toSwerveModuleStates());
+   * 
+   * }
+   */
   // Return a Chassis Speed that is based on the WPI drive Kinimatics
-  public ChassisSpeeds  getChassisSpeeds (){
+  public ChassisSpeeds getChassisSpeeds() {
 
-  //SwerveModuleState [] SMS = {m_frontLeft.getState(),m_frontRight.getState(),m_rearLeft.getState(),m_rearRight.getState()};
+    // SwerveModuleState [] SMS =
+    // {m_frontLeft.getState(),m_frontRight.getState(),m_rearLeft.getState(),m_rearRight.getState()};
 
-      
     // https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/swerve-drive-kinematics.html
-    //return  DriveConstants.kDriveKinematics.toChassisSpeeds(SMS);
-    return  DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(),m_frontRight.getState(),m_rearLeft.getState(),m_rearRight.getState());
-
+    // return DriveConstants.kDriveKinematics.toChassisSpeeds(SMS);
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(),
+        m_rearLeft.getState(), m_rearRight.getState());
 
   }
 
-// wrap the drive command with a function that accepts a ChassisSpeed Object
-public void driveRobotRelative (ChassisSpeeds cs) {
+  // wrap the drive command with a function that accepts a ChassisSpeed Object
+  public void driveRobotRelative(ChassisSpeeds cs) {
 
-  this.drive(cs.vxMetersPerSecond, cs.vyMetersPerSecond, cs.omegaRadiansPerSecond,false, true);
-}
-  
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(cs);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_rearLeft.setDesiredState(swerveModuleStates[2]);
+    m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+
 }
